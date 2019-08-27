@@ -11,7 +11,7 @@ return array(
         'port' => 3306,
         'user' => 'root',
         'password' => $password,
-        'database' => 'testing',
+        'database' => 'wo',
         'tablePrefix' => '',
         'charset' => 'utf8',
         'collate' => 'utf8_general_ci',

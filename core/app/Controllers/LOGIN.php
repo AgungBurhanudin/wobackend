@@ -90,7 +90,7 @@ class LOGIN extends Resources\Controller
             $aplikasiid     = $arr_cek->appid;
             $aplikasiid_add = $this->browserid . '#' . $this->appid;
             
-                if ($passwd == $this->pwd) {
+                if ($passwd == md5($this->pwd)) {
                         //login sukses
                         $reply->status           = 'SUKSESLOGIN';
                         $reply->message          = 'Berhasil Login';

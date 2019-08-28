@@ -109,7 +109,7 @@ class LOGIN extends Resources\Controller
                         $reply->nama             = $nama;
                         $reply->appid            = $this->appid;
                         $strSqlUpLogin           = "update app_user set user_token = '$reply->token', last_used = now(), ip = '$this->ip', status = 1,"
-                            . "appid = '$aplikasiid_add', salah_pin = 0 where user_id = '$noid' and user_real_name = '$this->username'";
+                            . "appid = '$aplikasiid_add', salah_pin = 0 where user_id = '$noid'";
                         
                         $db->query($strSqlUpLogin);
                 } else {
@@ -129,12 +129,11 @@ class LOGIN extends Resources\Controller
         $fungsi         = new \Libraries\Fungsi();
         $aplikasiid_add = $this->browserid . '#' . $this->appid;
         //$this->website;
-
         $reply->tipe      = 'CEKSESSION';
 
         $sql = "SELECT * FROM app_user WHERE appid = '$aplikasiid_add' "
             . "and user_token = '$this->token' "
-            . "and user_user_name = '$this->username' "
+            . "and UPPER(user_user_name) = '$this->username' "
             . "and last_used > DATE_SUB(NOW(),INTERVAL 60 MINUTE);";
         $arr_cek = $db->singleRow($sql);
         // print_r($sql);die();

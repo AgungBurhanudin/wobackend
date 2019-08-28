@@ -48,9 +48,8 @@ class Databases {
         $ftime = $time_sess != 0 ? "and last_used > DATE_SUB(NOW(),INTERVAL 60 MINUTE)" : '';
         $qcek_login = "select * from app_user "
                 . "where user_token = '$token' and status = 1 and appid = '$appid' "
-                . "and user_id = '$noid' and user_user_name = '$username' "
+                . "and user_id = '$noid' and UPPER(user_user_name) = '$username' "
                 . "$ftime;";
-
         $arr = $this->db->row($qcek_login);
         if (!isset($arr->user_user_name)) {
             $this->error->invalidSession();

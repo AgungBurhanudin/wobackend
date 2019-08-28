@@ -24,6 +24,12 @@ if($action_request == "get"){
   ON d.id_user = e.user_id 
   WHERE a.status = 1
   ORDER BY a.tanggal DESC";
-  $data['data'] = $this->db->results($sql,'array');
+  $result = $this->db->results($sql,'array');
+  if(empty($result)){
+    $data['data'] = null;
+  }else{
+    $data['data'] = $result;
+  }
+  
   $reply = json_encode($data);
 }

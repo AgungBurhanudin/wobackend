@@ -5,30 +5,38 @@ namespace Controllers;
 use Models;
 use Resources;
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+   $method = $_SERVER['REQUEST_METHOD'];
+   if ($method == "OPTIONS") {
+       die();
+   }
+
 class LOGIN extends Resources\Controller
 {
 
     public function __construct()
     {
+        
         parent::__construct();
         $fungsi        = new \Libraries\Fungsi();
         $request       = file_get_contents('php://input');
-        $jreq          = json_decode(preg_replace('/[^a-zA-Z0-9\-\_\#\@\ \.\,\:\"\]\[\}\{]/', '', $request));
-        $this->request = $request;
-        $this->tipe    = strtoupper($jreq->tipe);
+        $jreq          = json_decode($request, true);
+        $this->tipe    = strtoupper($jreq['tipe']);
 
         $this->ip       = getenv('REMOTE_ADDR');
-        $req_noid       = (isset($jreq->noid)) ? $jreq->noid : '';
-        $this->appid    = (isset($jreq->appid)) ? $jreq->appid : '';
+        $req_noid       = (isset($jreq['noid'])) ? $jreq['noid'] : '';
+        $this->appid    = (isset($jreq['appid'])) ? $jreq['appid'] : '';
         $this->noid     = strtoupper($req_noid);
-        $req_username   = (isset($jreq->username)) ? $jreq->username : '';
+        $req_username   = (isset($jreq['username'])) ? $jreq['username'] : '';
         $this->username = strtoupper($req_username);
-        $req_password   = (isset($jreq->password)) ? $jreq->password : '';
+        $req_password   = (isset($jreq['password'])) ? $jreq['password'] : '';
         $this->pwd      = $req_password;
-        $this->token    = strtoupper($jreq->token);
+        $this->token    = strtoupper($jreq['token']);
 
         $tipebrowser = getenv('HTTP_USER_AGENT') . getenv('HTTP_ACCEPT_LANGUAGE');
-        if (strlen($this->appid) < 10 && $jreq->tipe == 'LOGIN') {
+        if (strlen($this->appid) < 10 && $jreq['tipe'] == 'LOGIN') {
             $appid_browser = $fungsi->randomString(16);
         } else {
             $appid_browser = $this->appid;
@@ -70,6 +78,7 @@ class LOGIN extends Resources\Controller
 
     public function LOGIN($interface)
     {
+
         $db     = new Models\Databases();
         $reply  = new Models\LoginRespon();
         $fungsi = new \Libraries\Fungsi();
@@ -128,7 +137,7 @@ class LOGIN extends Resources\Controller
             . "and user_user_name = '$this->username' "
             . "and last_used > DATE_SUB(NOW(),INTERVAL 60 MINUTE);";
         $arr_cek = $db->singleRow($sql);
-
+        // print_r($sql);die();
         if (isset($arr_cek->user_user_name)) {
             $noid                    = $arr_cek->user_id;
             $reply->status           = "SUKSESCEKSESSION";

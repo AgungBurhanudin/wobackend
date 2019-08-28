@@ -6,6 +6,14 @@ use Libraries;
 use Models;
 use Resources;
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+   $method = $_SERVER['REQUEST_METHOD'];
+   if ($method == "OPTIONS") {
+       die();
+   }
+   
 class XREQUEST extends Resources\Controller
 {
 
@@ -26,12 +34,12 @@ class XREQUEST extends Resources\Controller
 
         $db            = new Models\Databases();
         $param         = file_get_contents('php://input');
-        $jreq          = json_decode(preg_replace('/[^a-zA-Z0-9\-\_\#\@\ \.\,\:\"\]\[\}\{]/', '', $param));
-        $userid          = $jreq->userid;
-        $username      = $jreq->username;
-        $token         = $jreq->token;
+        $jreq          = json_decode(preg_replace('/[^a-zA-Z0-9\-\_\#\@\ \.\,\:\"\]\[\}\{]/', '', $param),true);
+        $userid          = $jreq['userid'];
+        $username      = $jreq['username'];
+        $token         = $jreq['token'];
         $tipebrowser   = getenv('HTTP_USER_AGENT') . getenv('HTTP_ACCEPT_LANGUAGE');
-        $appid_browser = $jreq->appid;
+        $appid_browser = $jreq['appid'];
         $secClient     = substr(base64_encode($appid_browser . $tipebrowser), 15, 50) . '#' . $appid_browser;
         $appid         = $secClient;
         $time_sess     = '60';

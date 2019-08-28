@@ -1,6 +1,6 @@
 <?php
 
-$password = 'admin';
+$password = '';
 $host = 'localhost';
 //coba test
 return array(

@@ -12,11 +12,13 @@ if($action_request == "get"){
     if (!empty($cek)){
         $update = "Update undangan set status = true where id = '$id_user'";
         $this->db->query($update);
+
     }
 
     $data = array(
         'response_code' => '0000',
-        'response_message' => "Berhasil"
+        'response_message' => "Berhasil",
+        "data" => $cek
     );
   }else{
     $data['data'] = null;
